@@ -1,6 +1,6 @@
 if game.PlaceId == 11599913094 then
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
-local Window = OrionLib:MakeWindow({Name = "Nuke Simulator GUI", HidePremium = false, IntroText = "Made by Mantje", IntroEnabled = true, SaveConfig = true, ConfigFolder = "Nuke Simulator GUI"})
+local Window = OrionLib:MakeWindow({Name = "Nuke Simulator GUI", HidePremium = false, IntroText = "Made by Mantje", IntroEnabled = false, SaveConfig = true, ConfigFolder = "Nuke Simulator GUI"})
 
 --Always crit
 
@@ -21,10 +21,21 @@ end
 _G.AutoOpen = true
 _G.AutoHatch = true
 _G.SelectEgg = "None"
-_G.AutoCollect = true
+_G.AutoCollect = false
 _G.EquipBest = true
 _G.AutoClaim = true
 _G.AntiAFk = true
+_G.AverageCalculation = false
+_G.TableThing = {}
+_G.rconsole = false
+local startval = 60
+
+if _G.rconsole then
+    print("rconsole is enabled")
+else
+    print("rconsole is disabled")
+end
+
 
 
 --Functions
@@ -77,6 +88,49 @@ function AntiAFK()
 	end
 end
 
+function AverageCalculation()
+	while _G.AverageCalculation do
+		local startval = string.gsub(game.Players.LocalPlayer.PlayerGui.HUD.TopRight[_G.Tracking].Holder.Amount.Text, ",", "")
+		if _G.rconsole then
+			rconsoleprint('@@LIGHT_MAGENTA@@')
+			rconsoleprint("Starting with: " .. startval .. " " .. _G.Tracking .. " Wait 60 Seconds" .. "\n")
+		else
+			print("Starting with: " .. startval .." " .. _G.Tracking .. " Wait 60 Seconds")
+		end
+	
+		wait(60)
+
+		if not _G.AverageCalculation then
+			print("Stopping the calculation for an average")
+			break
+		end
+
+		local endval = string.gsub(game.Players.LocalPlayer.PlayerGui.HUD.TopRight[_G.Tracking].Holder.Amount.Text, ",", "")
+		local diffy = tonumber(endval) - tonumber(startval)
+		if _G.rconsole then
+			rconsoleprint('@@LIGHT_CYAN@@')
+			rconsoleprint("Ended with: " .. endval .. " " .. _G.Tracking .. " || Gained: " .. diffy .. " " .. _G.Tracking .. " in 60 seconds \n")
+		else
+			print("Ended with: " .. endval .. " " .. _G.Tracking .. " || Gained: " .. diffy .. " " .. _G.Tracking .. " in 60 seconds")
+		end
+		table.insert(_G.TableThing, diffy)
+		
+		local b = 0
+		for i,v in pairs(_G.TableThing) do
+			b = b + v
+		end
+		if _G.rconsole then
+			rconsoleprint('@@GREEN@@')
+			rconsoleprint("Total: " .. b .. " " .. _G.Tracking .. " in " ..  #_G.TableThing .. " mins || Average Per Min: " .. b/#_G.TableThing .. " " .. _G.Tracking .. "\n \n")
+		else
+			print("Total: " .. b .. " " .. _G.Tracking .. " in " .. #_G.TableThing .. " mins || Average Per Min: " .. b/#_G.TableThing .. " " .. _G.Tracking)
+			CoolLabel:Set("Total: " .. b .. " " .. _G.Tracking .. " in " .. #_G.TableThing .. " mins || Average Per Min: " .. b/#_G.TableThing .. " " .. _G.Tracking)
+		end
+	end
+end
+
+
+
 -- Tabs
 local EggsTab = Window:MakeTab({
 	Name = "Silo Opener",
@@ -96,6 +150,11 @@ local MiscTab = Window:MakeTab({
 	PremiumOnly = false
 })
 
+local StatTab = Window:MakeTab({
+	Name = "Stats",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
 
 -- Toggles
 EggsTab:AddToggle({
@@ -133,15 +192,54 @@ AutoFarmTab:AddToggle({
 	end    
 })
 
+
 MiscTab:AddToggle({
 	Name = "AntiAFK",
 	Default = false,
 	Callback = function(Value)
-		_G.AntiAFK = true
+		_G.AntiAFK = Value
         AntiAFK()
 	end    
 })
 
+StatTab:AddToggle({
+	Name = "Using Synapse X? External Console",
+	Default = false,
+	Callback = function(Value)
+		_G.rconsole = Value
+		if _G.rconsole then
+			print("rconsole is enabled")
+		end	
+	end    
+})
+
+StatTab:AddButton({
+	Name = "Start Calculating The Average",
+	Callback = function(Value)
+		print("Calculating The Average for " .. _G.Tracking)
+		CoolLabel:Set("Calculating the Average For " .. _G.Tracking .. ". Wait 60 Seconds")
+		_G.AverageCalculation = true
+		AverageCalculation()
+	end    
+})
+
+StatTab:AddButton({
+	Name = "Stop Calculating The Average",
+	Callback = function(Value)
+		print("Stopped Calculating the Average for " .. _G.Tracking)
+		CoolLabel:Set("Stopped Calculating the Average for " .. _G.Tracking)
+		wait(2)
+		CoolLabel:Set("Wait 1 Minute before starting a new calculation")
+		wait(2)
+		CoolLabel:Set("Start A New Calculation")
+		_G.AverageCalculation = false
+		if _G.rconsole then
+			rconsoleclear()
+		end
+		wait(10)
+		AverageCalculation()
+	end    
+})
 
 -- Dropdowns
 
@@ -152,6 +250,16 @@ EggsTab:AddDropdown({
 	Callback = function(Value)
         _G.SelectEgg = Value
         print(_G.SelectEgg)
+	end    
+})
+
+
+StatTab:AddDropdown({
+	Name = "Select Currency",
+	Options = {"Gems", "Coins", "Otaku Coins", "Moon Coins", "Anime Coins", "Cyber Coins"},
+	Callback = function(Value)
+        _G.Tracking = Value
+        print(_G.Tracking)
 	end    
 })
 
@@ -166,11 +274,13 @@ MiscTab:AddSlider({
 	Increment = 1,
 	Callback = function(Value)
         _G.Movementspeed = Value
-		print(Value)
 		game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value
 	end    
 })
 
+-- Labels
+
+CoolLabel = StatTab:AddLabel("Start A New Calculation")
 
 
 end
