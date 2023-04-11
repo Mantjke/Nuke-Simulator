@@ -1,6 +1,6 @@
 if game.PlaceId == 11599913094 then
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
-local Window = OrionLib:MakeWindow({Name = "Nuke Simulator GUI", HidePremium = false, IntroText = "Made by Mantje", IntroEnabled = true, SaveConfig = true, ConfigFolder = "Nuke Simulator GUI"})
+local Window = OrionLib:MakeWindow({Name = "Nuke Simulator GUI", HidePremium = false, IntroText = "Made by Mantje", IntroEnabled = false, SaveConfig = true, ConfigFolder = "Nuke Simulator GUI"})
 
 --Always crit
 
@@ -100,11 +100,6 @@ function AverageCalculation()
 	
 		wait(60)
 
-		if not _G.AverageCalculation then
-			print("Stopping the calculation for an average")
-			break
-		end
-
 		local endval = string.gsub(game.Players.LocalPlayer.PlayerGui.HUD.TopRight[_G.Tracking].Holder.Amount.Text, ",", "")
 		local diffy = tonumber(endval) - tonumber(startval)
 		if _G.rconsole then
@@ -119,6 +114,7 @@ function AverageCalculation()
 		for i,v in pairs(_G.TableThing) do
 			b = b + v
 		end
+
 		if _G.rconsole then
 			rconsoleprint('@@GREEN@@')
 			rconsoleprint("Total: " .. b .. " " .. _G.Tracking .. " in " ..  #_G.TableThing .. " mins || Average Per Min: " .. b/#_G.TableThing .. " " .. _G.Tracking .. "\n \n")
@@ -126,10 +122,13 @@ function AverageCalculation()
 			print("Total: " .. b .. " " .. _G.Tracking .. " in " .. #_G.TableThing .. " mins || Average Per Min: " .. b/#_G.TableThing .. " " .. _G.Tracking)
 			CoolLabel:Set("Total: " .. b .. " " .. _G.Tracking .. " in " .. #_G.TableThing .. " mins || Average Per Min: " .. b/#_G.TableThing .. " " .. _G.Tracking)
 		end
+
+		if not _G.AverageCalculation then
+			print("Stopping the calculation for an average")
+			break
+		end
 	end
 end
-
-
 
 -- Tabs
 local EggsTab = Window:MakeTab({
@@ -226,13 +225,13 @@ StatTab:AddButton({
 StatTab:AddButton({
 	Name = "Stop Calculating The Average",
 	Callback = function(Value)
+		_G.AverageCalculation = false
 		print("Stopped Calculating the Average for " .. _G.Tracking)
 		CoolLabel:Set("Stopped Calculating the Average for " .. _G.Tracking)
 		wait(2)
 		CoolLabel:Set("Wait 1 Minute before starting a new calculation")
 		wait(2)
 		CoolLabel:Set("Start A New Calculation")
-		_G.AverageCalculation = false
 		if _G.rconsole then
 			rconsoleclear()
 		end
