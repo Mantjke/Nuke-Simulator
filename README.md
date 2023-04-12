@@ -6,3 +6,29 @@ Finally, the GUI has a function that calculates the average coin gain for every 
 This GUI was created in little time, and any new ideas or suggestions are welcomed.
 
 I skid a lot of code from other people so don't come to me with "OH YOU USED THAT", I don't give a shit. I made this to learn a bit more about coding and because there wasn't any gui I really liked.
+
+Game link:
+
+https://www.roblox.com/games/11599913094/MEGA-Nuke-Simulator
+
+
+Tags for google algo:
+nuke simulator roblox
+roblox nuke simulator script
+roblox nuke simulator auto farm
+roblox nuke simulator gui
+roblox nuke simulator hacks
+roblox nuke simulator codes
+roblox nuke simulator gameplay
+roblox nuke simulator secrets
+roblox nuke simulator exploits
+roblox nuke simulator glitches
+nuke simulator script
+nuke simulator auto farm
+nuke simulator gui
+nuke simulator hacks
+nuke simulator codes
+nuke simulator gameplay
+nuke simulator secrets
+nuke simulator exploits
+nuke simulator glitches
