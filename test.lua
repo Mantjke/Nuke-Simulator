@@ -125,6 +125,8 @@ function AverageCalculation()
 
 		if not _G.AverageCalculation then
 			print("Stopping the calculation for an average")
+			CoolLabel:Set("You can now start a new calculation")
+			_G.TableThing = {}
 			break
 		end
 	end
@@ -229,9 +231,7 @@ StatTab:AddButton({
 		print("Stopped Calculating the Average for " .. _G.Tracking)
 		CoolLabel:Set("Stopped Calculating the Average for " .. _G.Tracking)
 		wait(2)
-		CoolLabel:Set("Wait 1 Minute before starting a new calculation")
-		wait(2)
-		CoolLabel:Set("Start A New Calculation")
+		CoolLabel:Set("Wait before starting a new calculation")
 		if _G.rconsole then
 			rconsoleclear()
 		end
