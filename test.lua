@@ -2,7 +2,7 @@ if game.PlaceId == 11599913094 then
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
 local Window = OrionLib:MakeWindow({Name = "Nuke Simulator GUI", HidePremium = false, IntroText = "Made by Mantje#9988", IntroEnabled = true, SaveConfig = true, ConfigFolder = "Nuke Simulator GUI"})
 
--- Join my discord because I don't add people : https://discord.gg/NgNFjBGHbt	
+-- Add me on discord if you want to see improvements or updates Mantje#9988
 	
 --Always crit
 
